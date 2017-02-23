@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Results</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/app.css" >
+    <link rel="stylesheet" type="text/css" href="/static/css/success.css" >
+</head>
+<body>
+<table class="table-fill" th:if="${find}">
+    <thead>
+    <tr>
+        <th class="text-left">Name</th>
+        <th class="text-left">Created Date</th>
+        <th class="text-left">Age</th>
+        <th class="text-left">Admin</th>
+        <th class="text-left">Function</th>
+    </tr>
+    </thead>
+    <tbody class="table-hover">
+        <tr>
+            <td class="text-left" th:text="${searchResult.name}"></td>
+            <td class="text-left"th:text="${searchResult.createdDate}"></td>
+            <td class="text-left" th:text="${searchResult.age}"></td>
+            <td class="text-left" th:text="${searchResult.isAdmin}"></td>
+            <td><a th:href="@{/delete-{name}-user(name=${searchResult.name})}">Delete</a>
+                <a th:href="@{/edit-{name}-user(name=${searchResult.name})}">Edit</a></td>
+        </tr>
+    </tbody>
+</table>
+
+<div id="display-error" th:unless="${find}" th:text="${stringForSearching}"> </div>
+
+<section class="content">
+    <div class="download">
+        <a class="button" th:href="@{/}">Go back to User List</a>
+    </div>
+</section>
+
+</body>
+</html>

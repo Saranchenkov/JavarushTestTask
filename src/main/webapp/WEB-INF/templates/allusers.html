@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Users</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/app.css" >
+    <link rel="stylesheet" type="text/css" href="/static/css/search.css"/>
+</head>
+<body>
+<div class="table-title">
+    <h3>List of Users</h3>
+</div>
+
+<table class="table-fill">
+    <thead>
+    <tr>
+        <th class="text-left">Name</th>
+        <th class="text-left">Created Date</th>
+        <th class="text-left">Age</th>
+        <th class="text-left">Admin</th>
+        <th class="text-left">Function</th>
+    </tr>
+    </thead>
+    <tbody class="table-hover">
+        <tr th:each="user : ${userList.pageList}">
+            <td class="text-left" th:text="${user.name}"></td>
+            <td class="text-left" th:text="${{user.createdDate}}"></td>
+            <td class="text-left" th:text="${user.age}"></td>
+            <td class="text-left" th:text="${user.isAdmin}"></td>
+            <td><a th:href="@{/delete-{name}-user(name=${user.name})}">Delete</a>
+                <a th:href="@{/edit-{name}-user(name=${user.name})}">Edit</a></td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+<section class="content">
+    <div class="download">
+        <a class="button" th:href="@{/new}">Add New User</a>
+    </div>
+</section>
+
+<div>
+    <form class="form-wrapper cf" method="get" th:action="@{/search}">
+        <div>
+            <input type="text" id="txt" name="searchString" placeholder="Search user by name..." required>
+        </div>
+
+        <div>
+            <button id="button-id" type="submit">Search</button>
+        </div>
+    </form>
+</div>
+
+<div class="pagination">
+    <span>
+        <a th:if="${userList.firstPage}">Previous</a>
+        <a th:unless="${userList.firstPage}" href="/prev">Previous</a>
+    </span>
+    <span th:each="i : ${#numbers.sequence(1, userList.pageCount)}">
+        <a th:if="${i-1} eq ${userList.page}" th:text="${i}"></a>
+        <a th:unless="${i-1} eq ${userList.page}" th:href="@{/{page}(page=${i-1})}" th:text="${i}"></a>
+        &nbsp;&nbsp;
+    </span>
+    <span>
+        <a th:if="${userList.lastPage}">Next</a>
+        <a th:unless="${userList.lastPage}" href="/next">Next</a>
+    </span>
+</div>
+
+</body>
+</html>

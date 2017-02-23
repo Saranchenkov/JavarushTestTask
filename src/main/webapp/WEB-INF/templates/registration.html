@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Registration</title>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/registr.css" >
+</head>
+
+<body>
+<div class="main-content">
+<form class="form-validation" th:object="${user}" method="post">
+	<div class="form-title-row">
+		<h1 th:text="${edit} ? 'Update Form' : 'Registration Form'"></h1>
+	</div>
+
+	<div class="form-row" th:classappend="${#fields.hasErrors('name')}? 'form-invalid-data' ">
+		<input type="hidden" th:field="*{id}"/>
+		<label>
+			<span>Name:</span>
+			<input th:field="*{name}" placeholder="Enter the name, please"/>
+		</label>
+		<span th:class="form-invalid-data-info" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+	</div>
+
+	<div class="form-row" th:classappend="${#fields.hasErrors('createdDate')}? 'form-invalid-data' ">
+		<label>
+			<span>Created Date:</span>
+			<input th:field="*{createdDate}" placeholder="Pattern: yyyy-MM-dd HH:mm:ss"/>
+		</label>
+		<span th:class="form-invalid-data-info" th:if="${#fields.hasErrors('createdDate')}" th:errors="*{createdDate}"></span>
+	</div>
+
+	<div class="form-row" th:classappend="${#fields.hasErrors('age')}? 'form-invalid-data' ">
+		<label>
+			<span>Age:</span>
+			<input th:field="*{age}" placeholder="Enter the age of user, please"/>
+		</label>
+		<span th:class="form-invalid-data-info" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+	</div>
+
+	<div class="form-row" th:classappend="${#fields.hasErrors('isAdmin')}? 'form-invalid-data' ">
+		<label>
+			<span>Admin:</span>
+			<input th:field="*{isAdmin}" placeholder="If you're admin, type 1 else 0."/>
+		</label>
+		<span th:class="form-invalid-data-info" th:if="${#fields.hasErrors('isAdmin')}" th:errors="*{isAdmin}"></span>
+	</div>
+	<div>
+		<button type="submit" th:text="Submit"></button>
+	</div>
+	</form>
+</div>
+
+<section class="content">
+	<div class="download">
+		<a class="button" th:href="@{/}">Go back to User List</a>
+	</div>
+</section>
+	<br/>
+	<br/>
+
+
+
+</body>
+</html>

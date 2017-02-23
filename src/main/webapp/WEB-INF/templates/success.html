@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/app.css" >
+	<link rel="stylesheet" type="text/css" href="/static/css/success.css" >
+	<title>Confirmation Page</title>
+</head>
+<body>
+<div id="display-success" th:text="${success}"> </div>
+
+	<br/>
+	<br/>
+<section class="content">
+	<div class="download">
+		<a class="button" th:href="@{/}">Go back to User List</a>
+	</div>
+</section>
+
+</body>
+
+</html>
