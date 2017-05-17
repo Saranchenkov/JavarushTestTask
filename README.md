@@ -1,5 +1,4 @@
 # JavarushTestTask
 В качестве тестового задания было выбрано CRUD (create, read, update, delete). 
-Скрипт для создания и наполнения базы данных находится в src/main/sql/.
-Имя базы - "test". Логин и пароль - "root". (Как указано в задании)
-
+Имя базы - "test". Логин - "root", пароль - "12345".
+Стек технологий для этого проекта: Java 8, Spring MVC (Thymeleaf), JPA/Hibernate, Maven, MySQL.
