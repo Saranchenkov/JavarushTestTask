@@ -82,6 +82,9 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	@Bean
 	public MessageSource messageSource() {
 	    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		/* Regular and XMl properties files are supported: e.g. "messages" will find
+	 	a "messages.properties", "messages_en.properties" etc arrangement as well
+	 	as "messages.xml", "messages_en.xml" etc.*/
 	    messageSource.setBasename("messages");
 	    return messageSource;
 	}

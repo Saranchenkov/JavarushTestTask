@@ -3,12 +3,10 @@ package com.testtask.springmvc.controller;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.testtask.springmvc.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.support.PagedListHolder;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,58 +35,14 @@ public class AppController {
 	 * This method will list all existing users with pagination.
 	 */
 	@RequestMapping(value = {"/{type}","/"}, method = RequestMethod.GET)
-	public ModelAndView all(@PathVariable Map<String, String> pathVariablesMap, HttpServletRequest req) {
-
-		PagedListHolder<User> userList = null;
-
-		String type = pathVariablesMap.get("type");
-
-		if(null == type) {
-			// First Request, Return first set of list
-			userList = new PagedListHolder<>();
-			userList.setSource(service.findAllUsers());
-			userList.setPageSize(2);
-			req.getSession().setAttribute("userList",  userList);
-			logPageDetails(userList);
-		} else if("next".equals(type)) {
-			// Return next set of list
-			userList = (PagedListHolder<User>) req.getSession().getAttribute("userList");
-			userList.nextPage();
-			logPageDetails(userList);
-		} else if("prev".equals(type)) {
-			// Return previous set of list
-			userList = (PagedListHolder<User>) req.getSession().getAttribute("userList");
-			userList.previousPage();
-			logPageDetails(userList);
-		} else {
-			// Return specific index set of list
-			System.out.println("type:" + type);
-			userList = (PagedListHolder<User>) req.getSession().getAttribute("userList");
-			int pageNum = Integer.parseInt(type);
-			userList.setPage(pageNum);
-			logPageDetails(userList);
-		}
-
+	public ModelAndView all(@PathVariable Map<String, String> map) {
+		String type = map.get("type");
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("allusers");
-		mv.getModel().put("userList", userList);
-
+		mv.getModel().put("userList", type == null ? service.getCurrentPageList(1) : service.getCurrentPageList(Integer.parseInt(type)));
+		mv.getModel().put("pageCount", service.getPageCount());
+		mv.getModel().put("currentPage", type == null ? 1 : Integer.valueOf(type));
 		return  mv;
-	}
-
-	private void logPageDetails(PagedListHolder productList) {
-
-		System.out.println("curent page - productList.getPage() :"
-				+ productList.getPage());
-
-		System.out.println("Total Num of pages - productList.getPageCount :"
-				+ productList.getPageCount());
-
-		System.out.println("is First page - productList.isFirstPage :"
-				+ productList.isFirstPage());
-
-		System.out.println("is Last page - productList.isLastPage :"
-				+ productList.isLastPage());
 	}
 
 	/*

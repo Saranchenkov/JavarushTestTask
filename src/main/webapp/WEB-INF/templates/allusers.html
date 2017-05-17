@@ -22,7 +22,7 @@
     </tr>
     </thead>
     <tbody class="table-hover">
-        <tr th:each="user : ${userList.pageList}">
+        <tr th:each="user : ${userList}">
             <td class="text-left" th:text="${user.name}"></td>
             <td class="text-left" th:text="${{user.createdDate}}"></td>
             <td class="text-left" th:text="${user.age}"></td>
@@ -53,18 +53,10 @@
 </div>
 
 <div class="pagination">
-    <span>
-        <a th:if="${userList.firstPage}">Previous</a>
-        <a th:unless="${userList.firstPage}" href="/prev">Previous</a>
-    </span>
-    <span th:each="i : ${#numbers.sequence(1, userList.pageCount)}">
-        <a th:if="${i-1} eq ${userList.page}" th:text="${i}"></a>
-        <a th:unless="${i-1} eq ${userList.page}" th:href="@{/{page}(page=${i-1})}" th:text="${i}"></a>
+    <span th:each="i : ${#numbers.sequence(1, pageCount)}">
+        <a th:if="${i} eq ${currentPage}" th:text="${i}"></a>
+        <a th:unless="${i} eq ${currentPage}" th:href="@{/{page}(page=${i})}" th:text="${i}"></a>
         &nbsp;&nbsp;
-    </span>
-    <span>
-        <a th:if="${userList.lastPage}">Next</a>
-        <a th:unless="${userList.lastPage}" href="/next">Next</a>
     </span>
 </div>
 

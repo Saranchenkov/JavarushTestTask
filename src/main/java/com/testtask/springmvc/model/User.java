@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 @Entity // This tells Hibernate to make a table out of this class
-@Table(name="USER")
+@Table(name="user")
 public class User {
 
 	@Id
@@ -41,10 +41,6 @@ public class User {
 
 	public int getId() {
 		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getName() {

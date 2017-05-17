@@ -7,6 +7,8 @@ import com.testtask.springmvc.model.User;
 public interface UserService {
 
 	User findById(int id);
+
+	List<User> getCurrentPageList(int pageNumber);
 	
 	void saveUser(User user);
 	
@@ -19,4 +21,6 @@ public interface UserService {
 	User findUserByName(String name);
 
 	boolean isUserNameUnique(Integer id, String name);
+
+	int getPageCount();
 }
