@@ -1,72 +1,51 @@
 package com.testtask.springmvc.service;
 
-import java.util.List;
-
-import com.testtask.springmvc.dao.GenericDao;
 import com.testtask.springmvc.model.User;
+import com.testtask.springmvc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("userService")
-@Transactional
 public class UserServiceImpl implements UserService {
 
-	private GenericDao<User> dao;
+	private static final int PAGE_SIZE = 4;
 
 	@Autowired
-	public void setDao(GenericDao<User> dao) {
-		this.dao = dao;
-	}
+	private UserRepository repository;
 
 	public User findById(int id) {
-		return dao.findById(id);
+		return repository.findById(id);
 	}
 
+	@Transactional
 	public void saveUser(User user) {
-		dao.save(user);
+		repository.save(user);
 	}
 
-	public List<User> getCurrentPageList(int pageNumber){
-		return dao.getCurrentPageList(pageNumber);
+	public Page<User> getCurrentPage(int pageNumber){
+		PageRequest page = new PageRequest(pageNumber - 1, PAGE_SIZE);
+		return repository.findAll(page);
 	}
 
-	/*
-	 * Since the method is running with Transaction, No need to call hibernate update explicitly.
-	 * Just fetch the entity from db and update it with proper values within transaction.
-	 * It will be updated in db once transaction ends. 
-	 */
+	@Transactional
 	public void updateUser(User user) {
-		User entity = dao.findById(user.getId());
-		if(entity != null){
-			entity.setName(user.getName());
-			entity.setCreatedDate(user.getCreatedDate());
-			entity.setAge(user.getAge());
-			entity.setIsAdmin(user.getIsAdmin());
-		}
+		repository.save(user);
 	}
 
 	public void deleteUserByName(String name) {
-		dao.deleteByName(name);
-	}
-	
-	public List<User> findAllUsers() {
-		return dao.findAll();
+		repository.deleteByName(name);
 	}
 
 	public User findUserByName(String name) {
-		return dao.findByName(name);
+		return repository.findByName(name);
 	}
 
 	public boolean isUserNameUnique(Integer id, String name) {
-		System.out.println("\n\n FINDING... \n\n");
 		User user = findUserByName(name);
 		return ( user == null || ((id != null) && (user.getId() == id)));
-	}
-
-	@Override
-	public int getPageCount() {
-		return (int)Math.ceil(findAllUsers().size()/4.0);
 	}
 }

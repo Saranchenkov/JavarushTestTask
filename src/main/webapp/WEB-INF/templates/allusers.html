@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/static/css/search.css"/>
 </head>
 <body>
+<!--/*@thymesVar id="page" type="org.springframework.data.domain.Page<User>"*/-->
 <div class="table-title">
     <h3>List of Users</h3>
 </div>
@@ -22,7 +23,7 @@
     </tr>
     </thead>
     <tbody class="table-hover">
-        <tr th:each="user : ${userList}">
+        <tr th:each="user : ${page.getContent()}">
             <td class="text-left" th:text="${user.name}"></td>
             <td class="text-left" th:text="${{user.createdDate}}"></td>
             <td class="text-left" th:text="${user.age}"></td>
@@ -43,7 +44,7 @@
 <div>
     <form class="form-wrapper cf" method="get" th:action="@{/search}">
         <div>
-            <input type="text" id="txt" name="searchString" placeholder="Search user by name..." required>
+            <input type="text" id="searchString" name="searchString" placeholder="Search user by name..." required>
         </div>
 
         <div>
@@ -53,9 +54,9 @@
 </div>
 
 <div class="pagination">
-    <span th:each="i : ${#numbers.sequence(1, pageCount)}">
-        <a th:if="${i} eq ${currentPage}" th:text="${i}"></a>
-        <a th:unless="${i} eq ${currentPage}" th:href="@{/{page}(page=${i})}" th:text="${i}"></a>
+    <span th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">
+        <a th:if="${i} eq ${page.getNumber() + 1}" th:text="${i}"></a>
+        <a th:unless="${i} eq ${page.getNumber() + 1}" th:href="@{/{page}(page=${i})}" th:text="${i}"></a>
         &nbsp;&nbsp;
     </span>
 </div>

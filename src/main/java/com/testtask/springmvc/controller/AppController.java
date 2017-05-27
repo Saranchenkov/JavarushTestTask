@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.testtask.springmvc.service.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/")
@@ -34,15 +33,11 @@ public class AppController {
 	/*
 	 * This method will list all existing users with pagination.
 	 */
-	@RequestMapping(value = {"/{type}","/"}, method = RequestMethod.GET)
-	public ModelAndView all(@PathVariable Map<String, String> map) {
-		String type = map.get("type");
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("allusers");
-		mv.getModel().put("userList", type == null ? service.getCurrentPageList(1) : service.getCurrentPageList(Integer.parseInt(type)));
-		mv.getModel().put("pageCount", service.getPageCount());
-		mv.getModel().put("currentPage", type == null ? 1 : Integer.valueOf(type));
-		return  mv;
+	@RequestMapping(value = {"/{pageNumber}","/"}, method = RequestMethod.GET)
+	public String all(@PathVariable Map<String, String> map, ModelMap model) {
+		int pageNumber = map.get("pageNumber") == null ? 1 : Integer.parseInt(map.get("pageNumber"));
+		model.addAttribute("page", service.getCurrentPage(pageNumber));
+		return "allusers";
 	}
 
 	/*
@@ -77,7 +72,7 @@ public class AppController {
 		 * 
 		 */
 		if(!service.isUserNameUnique(user.getId(), user.getName())){
-			FieldError nameError = new FieldError("user","name",messageSource.getMessage("non.unique.name", new String[]{user.getName()}, Locale.getDefault()));
+			FieldError nameError = new FieldError("user","name", messageSource.getMessage("non.unique.name", new String[]{user.getName()}, Locale.getDefault()));
 		    result.addError(nameError);
 			return "registration";
 		}
@@ -111,7 +106,7 @@ public class AppController {
 		}
 
 		if(!service.isUserNameUnique(user.getId(), user.getName())){
-			FieldError ssnError = new FieldError("user","name",messageSource.getMessage("non.unique.name", new String[]{user.getName()}, Locale.getDefault()));
+			FieldError ssnError = new FieldError("user","name", messageSource.getMessage("non.unique.name", new String[]{user.getName()}, Locale.getDefault()));
 		    result.addError(ssnError);
 			return "registration";
 		}
@@ -131,11 +126,11 @@ public class AppController {
 	}
 
 	@RequestMapping(value = "/search")
-	public String Search(@RequestParam("searchString") String searchString, Model model) {
+	public String search(@RequestParam("searchString") String searchString, Model model) {
 
 			User searchResult = service.findUserByName(searchString);
 			model.addAttribute("find", searchResult != null);
-			if (searchString.equals(null)){
+			if (searchString == null){
 				model.addAttribute("stringForSearching", "Name of user is empty. Please try again.");
 			} else {
 				model.addAttribute("stringForSearching", "User with name \"" + searchString + "\" is not found!");
